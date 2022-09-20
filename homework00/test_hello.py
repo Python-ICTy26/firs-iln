@@ -1,6 +1,6 @@
 import unittest
 
-from hello import get_greeting
+from .hello import get_greeting
 
 
 class HelloTestCase(unittest.TestCase):
