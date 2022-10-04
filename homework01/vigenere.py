@@ -2,7 +2,7 @@ def extend_keyword(text: str, keyword: str) -> str:
     """
     Extends a keyword to the given text.
     """
-    f, p = divmod(*map(len, [text, keyword]))
+    f, p = divmod(len(text), len(keyword))
     return keyword * f + keyword[:p]
 
 
