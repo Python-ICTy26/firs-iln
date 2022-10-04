@@ -23,10 +23,9 @@ def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
             alphabet[(alphabet.find(plaintext[i]) + shift) % 26]
             if plaintext[i] in alphabet
             else (
-                alphabet_lower[
-                    (alphabet_lower.find(plaintext[i]) + shift) % 26]
-                    if plaintext[i] in alphabet_lower
-                    else plaintext[i]
+                alphabet_lower[(alphabet_lower.find(plaintext[i]) + shift) % 26]
+                if plaintext[i] in alphabet_lower
+                else plaintext[i]
             )
         )
     return ciphertext
