@@ -22,16 +22,16 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
     for i in range(len(plaintext)):
-        if plaintext[i] == " ":
-            ciphertext += " "
-        else:
-            ciphertext += (
-                alphabet[(alphabet.find(plaintext[i]) + alphabet.find(keyword[i].upper())) % 26]
-                if plaintext[i] in alphabet
-                else alphabet_lower[
-                    (alphabet_lower.find(plaintext[i]) + alphabet.find(keyword[i].upper())) % 26
+        ciphertext += (
+            alphabet[(alphabet.find(plaintext[i]) + alphabet.find(keyword[i].upper())) % 26]
+            if plaintext[i] in alphabet
+            else (
+                alphabet_lower[(alphabet_lower.find(plaintext[i]) + alphabet.find(keyword[i].upper())) % 26
+                if keyword[i] in alphabet_lower
+                else plaintext[i]
                 ]
             )
+        )
 
     return ciphertext
 
@@ -58,8 +58,11 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
             plaintext += (
                 alphabet[(alphabet.find(ciphertext[i]) - alphabet.find(keyword[i].upper())) % 26]
                 if ciphertext[i] in alphabet
-                else alphabet_lower[
-                    (alphabet_lower.find(ciphertext[i]) - alphabet.find(keyword[i].upper())) % 26
-                ]
+                else (
+                    alphabet_lower[(alphabet_lower.find(ciphertext[i]) - alphabet.find(keyword[i].upper())) % 26
+                    if ciphertext[i] in alphabet_lower
+                    else ciphertext[i]
+                    ]
+                )
             )
     return plaintext
