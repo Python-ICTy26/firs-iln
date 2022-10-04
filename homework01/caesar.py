@@ -19,9 +19,16 @@ def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
     alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
 
     for i in range(len(plaintext)):
-        ciphertext += alphabet[(alphabet.find(plaintext[i]) + shift) % 26] if plaintext[i] in alphabet else (
-            alphabet_lower[(alphabet_lower.find(plaintext[i]) + shift) % 26] if plaintext[i] in alphabet_lower else
-            plaintext[i])
+        ciphertext += (
+            alphabet[(alphabet.find(plaintext[i]) + shift) % 26]
+            if plaintext[i] in alphabet
+            else (
+                alphabet_lower[
+                    (alphabet_lower.find(plaintext[i]) + shift) % 26]
+                    if plaintext[i] in alphabet_lower
+                    else plaintext[i]
+            )
+        )
     return ciphertext
 
 
@@ -43,9 +50,15 @@ def decrypt_caesar(ciphertext: str, shift: int = 3) -> str:
     alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
 
     for i in range(len(ciphertext)):
-        plaintext += alphabet[(alphabet.find(ciphertext[i]) - shift) % 26] if ciphertext[i] in alphabet else (
-            alphabet_lower[(alphabet_lower.find(ciphertext[i]) - shift) % 26] if ciphertext[i] in alphabet_lower else
-            ciphertext[i])
+        plaintext += (
+            alphabet[(alphabet.find(ciphertext[i]) - shift) % 26]
+            if ciphertext[i] in alphabet
+            else (
+                alphabet_lower[(alphabet_lower.find(ciphertext[i]) - shift) % 26]
+                if ciphertext[i] in alphabet_lower
+                else ciphertext[i]
+            )
+        )
     return plaintext
 
 
@@ -53,7 +66,7 @@ def caesar_breaker_brute_force(ciphertext: str, dictionary: tp.Set[str]) -> int:
     """
     Brute force breaking a Caesar cipher.
 
-     >>> d = {"python", "java", "ruby"}
+    >>> d = {"python", "java", "ruby"}
     >>> caesar_breaker_brute_force("python", d)
     0
     >>> caesar_breaker_brute_force("sbwkrq", d)
