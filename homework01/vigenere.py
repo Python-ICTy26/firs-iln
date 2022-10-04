@@ -32,24 +32,6 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
                 else plaintext[i]
             )
         )
-        # ciphertext += (
-        #     alphabet[
-        #         (alphabet.find(plaintext[i]) + alphabet.find(keyword[i % len(keyword)].upper()))
-        #         % 26
-        #     ]
-        #     if plaintext[i] in alphabet
-        #     else (
-        #         alphabet_lower[
-        #             (
-        #                 alphabet_lower.index(plaintext[i][0:-1])
-        #                 + alphabet.index(keyword[i % len(keyword)].upper()[0:-1])
-        #             )
-        #             % 26
-        #             if plaintext[i] in alphabet_lower
-        #             else plaintext[i]
-        #         ]
-        #     )
-        # )
 
     return ciphertext
 
@@ -70,25 +52,14 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
     for i in range(len(ciphertext)):
+        shift = alphabet.find(keyword[i % len(keyword)].upper())
         plaintext += (
-            alphabet[
-                (
-                    alphabet.find(ciphertext[i][:])
-                    - alphabet.find(keyword[i % len(keyword)][:].upper())
-                )
-                % 26
-            ]
-            if ciphertext[i][:] in alphabet
+            alphabet[(alphabet.find(ciphertext[i]) - shift) % 26]
+            if ciphertext[i] in alphabet
             else (
-                alphabet_lower[
-                    (
-                        alphabet_lower.index(ciphertext[i][:])
-                        - alphabet.index(keyword[i % len(keyword)].upper()[:])
-                    )
-                    % 26
-                    if ciphertext[i][:] in alphabet_lower
-                    else ciphertext[i][:]
-                ]
+                alphabet_lower[(alphabet_lower.find(ciphertext[i]) - shift) % 26]
+                if ciphertext[i] in alphabet_lower
+                else ciphertext[i]
             )
         )
     return plaintext
