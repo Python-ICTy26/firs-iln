@@ -28,7 +28,7 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
             else (
                 alphabet_lower[
                     (alphabet_lower.find(plaintext[i]) + alphabet.find(keyword[i].upper())) % 26
-                    if keyword[i] in alphabet_lower
+                    if plaintext[i] in alphabet_lower
                     else plaintext[i]
                 ]
             )
