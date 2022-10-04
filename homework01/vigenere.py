@@ -62,19 +62,19 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     for i in range(len(ciphertext)):
         plaintext += (
             alphabet[
-                (alphabet.find(ciphertext[i]) - alphabet.find(keyword[i % len(keyword)].upper()))
+                (alphabet.find(ciphertext[i][:]) - alphabet.find(keyword[i % len(keyword)][:].upper()))
                 % 26
             ]
-            if ciphertext[i] in alphabet
+            if ciphertext[i][:] in alphabet
             else (
                 alphabet_lower[
                     (
-                        alphabet_lower.index(ciphertext[i][0:-1])
-                        - alphabet.index(keyword[i % len(keyword)].upper()[0:-1])
+                        alphabet_lower.index(ciphertext[i][:])
+                        - alphabet.index(keyword[i % len(keyword)].upper()[:])
                     )
                     % 26
-                    if ciphertext[i] in alphabet_lower
-                    else ciphertext[i]
+                    if ciphertext[i][:] in alphabet_lower
+                    else ciphertext[i][:]
                 ]
             )
         )
