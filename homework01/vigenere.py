@@ -1,3 +1,11 @@
+def extend_keyword(text: str, keyword: str) -> str:
+    """
+    Extends a keyword to the given text.
+    """
+    f, p = divmod(*map(len, [text, keyword]))
+    return keyword * f + keyword[:p]
+
+
 def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     """
     Encrypts plaintext using a Vigenere cipher.
@@ -10,7 +18,13 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     'LXFOPVEFRNHR'
     """
     ciphertext = ""
-    # PUT YOUR CODE HERE
+    keyword = extend_keyword(plaintext, keyword)
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
+    for i in range(len(plaintext)):
+        ciphertext += alphabet[(alphabet.find(plaintext[i]) + alphabet.find(keyword[i].upper())) % 26] if plaintext[
+            i] in alphabet else alphabet_lower[(alphabet_lower.find(plaintext[i]) + alphabet.find(keyword[i].upper())) % 26]
+
     return ciphertext
 
 
@@ -26,5 +40,11 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     'ATTACKATDAWN'
     """
     plaintext = ""
-    # PUT YOUR CODE HERE
+    keyword = extend_keyword(ciphertext, keyword)
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
+    for i in range(len(ciphertext)):
+        plaintext += alphabet[(alphabet.find(ciphertext[i]) - alphabet.find(keyword[i].upper())) % 26] if ciphertext[
+        i] in alphabet else alphabet_lower[(alphabet_lower.find(ciphertext[i]) - alphabet.find(keyword[i].upper())) % 26]
+
     return plaintext
