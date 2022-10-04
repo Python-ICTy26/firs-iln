@@ -23,11 +23,18 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
     for i in range(len(plaintext)):
         ciphertext += (
-            alphabet[(alphabet.find(plaintext[i]) + alphabet.find(keyword[i % len(keyword)].upper())) % 26]
+            alphabet[
+                (alphabet.find(plaintext[i]) + alphabet.find(keyword[i % len(keyword)].upper()))
+                % 26
+            ]
             if plaintext[i] in alphabet
             else (
                 alphabet_lower[
-                    (alphabet_lower.find(plaintext[i]) + alphabet.find(keyword[i % len(keyword)].upper())) % 26
+                    (
+                        alphabet_lower.find(plaintext[i])
+                        + alphabet.find(keyword[i % len(keyword)].upper())
+                    )
+                    % 26
                     if plaintext[i] in alphabet_lower
                     else plaintext[i]
                 ]
@@ -57,11 +64,20 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
             plaintext += " "
         else:
             plaintext += (
-                alphabet[(alphabet.find(ciphertext[i]) - alphabet.find(keyword[i % len(keyword)].upper())) % 26]
+                alphabet[
+                    (
+                        alphabet.find(ciphertext[i])
+                        - alphabet.find(keyword[i % len(keyword)].upper())
+                    )
+                    % 26
+                ]
                 if ciphertext[i] in alphabet
                 else (
                     alphabet_lower[
-                        (alphabet_lower.find(ciphertext[i]) - alphabet.find(keyword[i % len(keyword)].upper()))
+                        (
+                            alphabet_lower.find(ciphertext[i])
+                            - alphabet.find(keyword[i % len(keyword)].upper())
+                        )
                         % 26
                         if ciphertext[i] in alphabet_lower
                         else ciphertext[i]
