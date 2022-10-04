@@ -13,6 +13,8 @@ def is_prime(n: int) -> bool:
     >>> is_prime(8)
     False
     """
+    if n == 1:
+        return False
     for i in range(2, int(n**0.5) + 1):
         if n % i == 0:
             return False
@@ -42,7 +44,7 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     23
     """
 
-    return list(filter(lambda x: x[1], [[i, (i * e) % phi == 1] for i in range(1, phi + 1)]))[0][0]
+    return list(filter(lambda x: x[1], [[i, (i * e) % phi == 1] for i in range(1, phi + 1)]))[0][0] if phi != 1 else 0
 
 
 def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[int, int]]:
