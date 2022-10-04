@@ -60,28 +60,25 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     alphabet_lower = "abcdefghijklmnopqrstuvwxyz"
     for i in range(len(ciphertext)):
-        if ciphertext[i] == " ":
-            plaintext += " "
-        else:
-            plaintext += (
-                alphabet[
+        plaintext += (
+            alphabet[
+                (
+                    alphabet.find(ciphertext[i])
+                    - alphabet.find(keyword[i % len(keyword)].upper())
+                )
+                % 26
+            ]
+            if ciphertext[i] in alphabet
+            else (
+                alphabet_lower[
                     (
-                        alphabet.find(ciphertext[i])
-                        - alphabet.find(keyword[i % len(keyword)].upper())
+                        alphabet_lower.index(ciphertext[i])
+                        - alphabet.index(keyword[i % len(keyword)].upper())
                     )
                     % 26
+                    if ciphertext[i] in alphabet_lower
+                    else ciphertext[i]
                 ]
-                if ciphertext[i] in alphabet
-                else (
-                    alphabet_lower[
-                        (
-                            alphabet_lower.index(ciphertext[i])
-                            - alphabet.index(keyword[i % len(keyword)].upper())
-                        )
-                        % 26
-                        if ciphertext[i] in alphabet_lower
-                        else ciphertext[i]
-                    ]
-                )
             )
+        )
     return plaintext
