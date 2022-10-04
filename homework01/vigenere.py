@@ -62,10 +62,7 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     for i in range(len(ciphertext)):
         plaintext += (
             alphabet[
-                (
-                    alphabet.find(ciphertext[i])
-                    - alphabet.find(keyword[i % len(keyword)].upper())
-                )
+                (alphabet.find(ciphertext[i]) - alphabet.find(keyword[i % len(keyword)].upper()))
                 % 26
             ]
             if ciphertext[i] in alphabet
