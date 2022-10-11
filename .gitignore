@@ -13,3 +13,6 @@ coverage.xml
 # Mypy cache
 .mypy_cache/
 
+.idea/.name
+.idea/workspace.xml
+homework02/some.txt
