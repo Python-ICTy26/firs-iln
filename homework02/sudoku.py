@@ -108,6 +108,7 @@ def find_empty_positions(
         for j in range(len(grid[1])):
             if grid[i][j] == ".":
                 return i, j
+    return None
 
 
 def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
@@ -133,7 +134,7 @@ def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -
     return set(res)
 
 
-def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
+def solve(grid: tp.List[tp.List[str]]) -> tp.List[tp.List[str]]:
     """Решение пазла, заданного в grid"""
     """ Как решать Судоку?
         1. Найти свободную позицию
