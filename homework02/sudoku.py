@@ -165,6 +165,10 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.List[tp.List[str]]:
         return grid
 
 
+def to_set(li: tp.List) -> tp.Set:
+    return set(li)
+
+
 def check_solution(solution: tp.List[tp.List[str]]) -> bool:
     """Если решение solution верно, то вернуть True, в противном случае False"""
     # TODO: Add doctests with bad puzzles
