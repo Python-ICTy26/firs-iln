@@ -175,6 +175,9 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
     correct = True
     for i in range(len(solution)):
         for j in range(len(solution[i])):
+            if solution[i][j] == ".":
+                correct = False
+                break
             sizes = list(
                 map(
                     len,
@@ -191,6 +194,8 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
             if sizes[0] == sizes[1] == sizes[2]:
                 continue
             correct = False
+            break
+        if not correct:
             break
     return correct
 
