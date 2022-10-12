@@ -127,9 +127,9 @@ def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -
     presented.extend(get_row(grid, pos))
     presented.extend(get_col(grid, pos))
     presented.extend(get_block(grid, pos))
-    presented = set(presented)
+    presented_set = set(presented)
     for i in "123456789":
-        if i not in presented:
+        if i not in presented_set:
             res.append(i)
     return set(res)
 
