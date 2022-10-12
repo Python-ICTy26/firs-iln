@@ -13,3 +13,9 @@ coverage.xml
 # Mypy cache
 .mypy_cache/
 
+.idea/workspace.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/firs-iln.iml
