@@ -179,7 +179,7 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
                 map(
                     len,
                     map(
-                        set,
+                        to_set,
                         [
                             get_row(solution, (i, j)),
                             get_col(solution, (i, j)),
