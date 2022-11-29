@@ -1,3 +1,4 @@
+import math
 import textwrap
 import time
 import typing as tp
@@ -6,8 +7,10 @@ from string import Template
 import pandas as pd
 from pandas import json_normalize
 
-from vkapi import config, session
 from vkapi.exceptions import APIError
+
+from .config import VK_CONFIG
+from .session import Session
 
 
 def get_posts_2500(
@@ -49,4 +52,38 @@ def get_wall_execute(
     :param fields: Список дополнительных полей для профилей и сообществ, которые необходимо вернуть.
     :param progress: Callback для отображения прогресса.
     """
-    pass
+    ses = Session(VK_CONFIG["domain"])
+    code = """return API.wall.get({
+        "owner_id": "%s",
+        "domain": "%s",
+        "offset": %d,
+        "count": "%d",
+        "filter": "%s",
+        "extended": %d,
+        "fields": "%s",
+        "v": "%s"
+    });"""
+    res = []
+    for i in range(math.ceil(count / 100)):
+        exec_code = code % (
+            owner_id,
+            domain,
+            100 * i,
+            100 * (i + 1) if count > 100 else count,
+            filter,
+            extended,
+            fields,
+            VK_CONFIG["version"],
+        )
+        response = ses.post(
+            "execute",
+            data={
+                "code": exec_code,
+                "access_token": VK_CONFIG["access_token"],
+                "v": VK_CONFIG["version"],
+            },
+        ).json()
+        res.extend(response["response"]["items"])
+        if i % 2 == 0:
+            time.sleep(1)
+    return json_normalize(res)

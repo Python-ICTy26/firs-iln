@@ -1,8 +1,7 @@
 import typing as tp
 
 import requests
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter, Retry
 
 
 class Session:
@@ -22,10 +21,45 @@ class Session:
         max_retries: int = 3,
         backoff_factor: float = 0.3,
     ) -> None:
-        pass
+        self.base_url = base_url
+        self.timeout = timeout
+        self.max_retries = max_retries
+        self.backoff_factor = backoff_factor
+        self.session = None
 
-    def get(self, url: str, *args: tp.Any, **kwargs: tp.Any) -> requests.Response:
-        pass
+    def get(self, url: str, params=None, *args: tp.Any, **kwargs: tp.Any) -> requests.Response:
+        session = self.retry_session()
+        response = session.get(
+            self.base_url + f"/{url}", *args, **kwargs, timeout=self.timeout, params=params
+        )
+        if response.status_code == 200:
+            return response
+        raise requests.exceptions.RetryError
 
-    def post(self, url: str, *args: tp.Any, **kwargs: tp.Any) -> requests.Response:
-        pass
+    def post(
+        self, url: str, params=None, data=None, *args: tp.Any, **kwargs: tp.Any
+    ) -> requests.Response:
+        session = self.retry_session()
+        response = session.post(
+            self.base_url + f"/{url}",
+            *args,
+            **kwargs,
+            timeout=self.timeout,
+            params=params,
+            data=data,
+        )
+        if response.status_code == 200:
+            return response
+        raise requests.exceptions.RetryError
+
+    def retry_session(self):
+        if not self.session:
+            self.session = requests.Session()
+            retries = Retry(
+                total=self.max_retries,
+                backoff_factor=self.backoff_factor,
+                raise_on_status=False,
+                status_forcelist=[500, 502, 503, 504],
+            )
+            self.session.mount("https://", HTTPAdapter(max_retries=retries))
+        return self.session

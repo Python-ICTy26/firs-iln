@@ -3,8 +3,9 @@ import math
 import time
 import typing as tp
 
-from vkapi import config, session
-from vkapi.exceptions import APIError
+from .config import VK_CONFIG
+from .session import Session
+from .exceptions import APIError
 
 QueryParams = tp.Optional[tp.Dict[str, tp.Union[str, int]]]
 
@@ -28,7 +29,18 @@ def get_friends(
     :param fields: Список полей, которые нужно получить для каждого пользователя.
     :return: Список идентификаторов друзей пользователя или список пользователей.
     """
-    pass
+    ses = Session(VK_CONFIG["domain"])
+    params = {
+        "user_id": str(user_id),
+        "count": str(count),
+        "offset": str(offset),
+        "fields": fields,
+        "access_token": VK_CONFIG["access_token"],
+        "v": VK_CONFIG["version"],
+    }
+    response = ses.get("friends.get", params=params)
+    response = response.json()
+    return FriendsResponse(response["response"]["count"], response["response"]["items"])
 
 
 class MutualFriends(tp.TypedDict):
@@ -57,4 +69,22 @@ def get_mutual(
     :param offset: Смещение, необходимое для выборки определенного подмножества общих друзей.
     :param progress: Callback для отображения прогресса.
     """
-    pass
+    ses = Session(VK_CONFIG["domain"])
+    params = {
+        "source_uid": source_uid,
+        "target_uid": target_uid,
+        "target_uids": target_uids,
+        "order": order,
+        "count": count,
+        "offset": str(offset),
+        "access_token": VK_CONFIG["access_token"],
+        "v": VK_CONFIG["version"],
+    }
+    res = []
+    for i in range(math.ceil((len(target_uids) / 100)) if target_uids else 1):
+        params["offset"] = i * 100
+        response = ses.get("friends.getMutual", params=params).json()
+        res.extend(response["response"])
+        if i % 2 == 0:
+            time.sleep(1)
+    return res
