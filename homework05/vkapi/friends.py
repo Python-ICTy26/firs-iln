@@ -4,8 +4,8 @@ import time
 import typing as tp
 
 from .config import VK_CONFIG
-from .session import Session
 from .exceptions import APIError
+from .session import Session
 
 QueryParams = tp.Optional[tp.Dict[str, tp.Union[str, int]]]
 
