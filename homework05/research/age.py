@@ -1,4 +1,3 @@
-
 import datetime as dt
 import statistics
 import typing as tp
