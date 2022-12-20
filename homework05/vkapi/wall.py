@@ -76,11 +76,9 @@ def get_wall_execute(
         )
         response = ses.post(
             "execute",
-            data={
-                "code": exec_code,
-                "access_token": VK_CONFIG["access_token"],
-                "v": VK_CONFIG["version"],
-            },
+            code=exec_code,
+            access_token=VK_CONFIG["access_token"],
+            v=VK_CONFIG["version"],
         ).json()
         res.extend(response["response"]["items"])
         if i % 2 == 0:
