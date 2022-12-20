@@ -74,15 +74,15 @@ def get_mutual(
     result = []
 
     for i in range(0, len(target_uids), 100):
-        result += session.get(
+        result += sesget(
             "friends.getMutual",
             source_uid=source_uid,
             target_uids=target_uids,
             order=order,
             count=count,
             offset=offset + i,
-            v=config.VK_CONFIG["version"],
-            access_token=config.VK_CONFIG["access_token"],
+            v=VK_CONFIG["version"],
+            access_token=VK_CONFIG["access_token"],
         ).json()["response"]
 
         if i % 200 == 0:
@@ -115,7 +115,6 @@ def get_mutual_with_class(
     ses = Session(VK_CONFIG["domain"])
     params = {
         "source_uid": source_uid,
-        "target_uid": target_uid,
         "target_uids": target_uids,
         "order": order,
         "count": count,
@@ -126,15 +125,15 @@ def get_mutual_with_class(
     result = []
 
     for i in range(0, len(target_uids), 100):
-        result += session.get(
+        result += ses.get(
             "friends.getMutual",
             source_uid=source_uid,
             target_uids=target_uids,
             order=order,
             count=count,
             offset=offset + i,
-            v=config.VK_CONFIG["version"],
-            access_token=config.VK_CONFIG["access_token"],
+            v=VK_CONFIG["version"],
+            access_token=VK_CONFIG["access_token"],
         ).json()["response"]
 
         if i % 200 == 0:
