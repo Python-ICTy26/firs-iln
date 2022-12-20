@@ -3,9 +3,8 @@ import math
 import time
 import typing as tp
 
-from .config import VK_CONFIG
-from .exceptions import APIError
-from .session import Session
+from vkapi import config, session
+from vkapi.exceptions import APIError
 
 QueryParams = tp.Optional[tp.Dict[str, tp.Union[str, int]]]
 
@@ -13,7 +12,7 @@ QueryParams = tp.Optional[tp.Dict[str, tp.Union[str, int]]]
 @dataclasses.dataclass(frozen=True)
 class FriendsResponse:
     count: int
-    items: tp.Union[tp.List[int], tp.List[tp.Dict[str, tp.Any]]]
+    items: tp.List[tp.Dict[str, tp.Any]]
 
 
 def get_friends(
@@ -22,25 +21,23 @@ def get_friends(
     """
     Получить список идентификаторов друзей пользователя или расширенную информацию
     о друзьях пользователя (при использовании параметра fields).
-
     :param user_id: Идентификатор пользователя, список друзей для которого нужно получить.
     :param count: Количество друзей, которое нужно вернуть.
     :param offset: Смещение, необходимое для выборки определенного подмножества друзей.
     :param fields: Список полей, которые нужно получить для каждого пользователя.
     :return: Список идентификаторов друзей пользователя или список пользователей.
     """
-    ses = Session(VK_CONFIG["domain"])
-    params = {
-        "user_id": str(user_id),
-        "count": str(count),
-        "offset": str(offset),
-        "fields": fields,
-        "access_token": VK_CONFIG["access_token"],
-        "v": VK_CONFIG["version"],
-    }
-    response = ses.get("friends.get", params=params)
-    response = response.json()["response"]
-    return FriendsResponse(response["response"]["count"], response["response"]["items"])
+    friends = session.get(
+        "friends.get",
+        user_id=user_id,
+        count=count,
+        offset=offset,
+        fields=fields,
+        v=config.VK_CONFIG["version"],
+        access_token=config.VK_CONFIG["access_token"],
+    ).json()["response"]
+
+    return FriendsResponse(friends["count"], friends["items"])
 
 
 class MutualFriends(tp.TypedDict):
@@ -68,22 +65,21 @@ def get_mutual(
     :param offset: Смещение, необходимое для выборки определенного подмножества общих друзей.
     :param progress: Callback для отображения прогресса.
     """
-    ses = Session(VK_CONFIG["domain"])
     if target_uids is None:
         target_uids = [target_uid]
 
     result = []
 
     for i in range(0, len(target_uids), 100):
-        result += ses.get(
+        result += session.get(
             "friends.getMutual",
             source_uid=source_uid,
             target_uids=target_uids,
             order=order,
             count=count,
             offset=offset + i,
-            v=VK_CONFIG["version"],
-            access_token=VK_CONFIG["access_token"],
+            v=config.VK_CONFIG["version"],
+            access_token=config.VK_CONFIG["access_token"],
         ).json()["response"]
 
         if i % 200 == 0:
@@ -113,28 +109,18 @@ def get_mutual_with_class(
     :param offset: Смещение, необходимое для выборки определенного подмножества общих друзей.
     :param progress: Callback для отображения прогресса.
     """
-    ses = Session(VK_CONFIG["domain"])
-    params = {
-        "source_uid": source_uid,
-        "target_uids": target_uids,
-        "order": order,
-        "count": count,
-        "offset": str(offset),
-        "access_token": VK_CONFIG["access_token"],
-        "v": VK_CONFIG["version"],
-    }
     result = []
 
     for i in range(0, len(target_uids), 100):
-        result += ses.get(
+        result += session.get(
             "friends.getMutual",
             source_uid=source_uid,
             target_uids=target_uids,
             order=order,
             count=count,
             offset=offset + i,
-            v=VK_CONFIG["version"],
-            access_token=VK_CONFIG["access_token"],
+            v=config.VK_CONFIG["version"],
+            access_token=config.VK_CONFIG["access_token"],
         ).json()["response"]
 
         if i % 200 == 0:
