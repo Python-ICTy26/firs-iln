@@ -68,13 +68,14 @@ def get_mutual(
     :param offset: Смещение, необходимое для выборки определенного подмножества общих друзей.
     :param progress: Callback для отображения прогресса.
     """
+    ses = Session(VK_CONFIG["domain"])
     if target_uids is None:
         target_uids = [target_uid]
 
     result = []
 
     for i in range(0, len(target_uids), 100):
-        result += sesget(
+        result += ses.get(
             "friends.getMutual",
             source_uid=source_uid,
             target_uids=target_uids,

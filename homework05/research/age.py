@@ -14,7 +14,7 @@ def age_predict(user_id: int) -> tp.Optional[float]:
     :param user_id: Идентификатор пользователя.
     :return: Медианный возраст пользователя.
     """
-    friends = get_friends(user_id, fields=["bdate"])
+    friends = get_friends(user_id, fields=["bdate"]).items
     ages = []
     for friend in friends.items:
         if "bdate" in friend:
